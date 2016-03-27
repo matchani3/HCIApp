@@ -1,5 +1,6 @@
 package com.example.sangeetha.hciapp;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,45 +9,83 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.*;
+import android.widget.*;
+import android.widget.TextView;
+import android.content.*;
+import android.app.*;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 public class MainActivity extends AppCompatActivity {
+
+    Button btnSignIn, btnSignUp;
+    LoginDataBaseAdapter loginDataBaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        loginDataBaseAdapter = new LoginDataBaseAdapter(this);
+        loginDataBaseAdapter = loginDataBaseAdapter.open();
+
+        btnSignIn = (Button) findViewById(R.id.buttonSignIN);
+        btnSignUp = (Button) findViewById(R.id.buttonSignUP);
+
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+
+                Intent intentSignUP = new Intent(getApplicationContext(),
+                        SignUPActivity.class);
+                startActivity(intentSignUP);
             }
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void signIn(View V) {
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.login);
+        dialog.setTitle("Login");
+        final EditText editTextUserName = (EditText) dialog
+                .findViewById(R.id.editTextUserNameToLogin);
+        final EditText editTextPassword = (EditText) dialog
+                .findViewById(R.id.editTextPasswordToLogin);
+
+        Button btnSignIn = (Button) dialog.findViewById(R.id.buttonSignIn);
+
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+
+                String userName = editTextUserName.getText().toString();
+                String password = editTextPassword.getText().toString();
+                String storedPassword = loginDataBaseAdapter
+                        .getSinlgeEntry(userName);
+                if (password.equals(storedPassword)) {
+                    Toast.makeText(MainActivity.this,
+                            "Congrats: Login Successfull", Toast.LENGTH_LONG)
+                            .show();
+                    dialog.dismiss();
+                    Intent main = new Intent(MainActivity.this, Welcome.class);
+                    startActivity(main);
+                } else {
+                    Toast.makeText(MainActivity.this,
+                            "User Name or Password does not match",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        dialog.show();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    protected void onDestroy() {
+        super.onDestroy();
+        loginDataBaseAdapter.close();
     }
 }
