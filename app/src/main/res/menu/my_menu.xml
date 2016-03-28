@@ -5,7 +5,11 @@
 
     </item>
     <item  android:id="@+id/id_profile"
-        android:title="My Profile"
+        android:title="My Profile">
 
-        ></item>
+    </item>
+
+    <item  android:id="@+id/id_back_to_home"
+        android:title="Home">
+    </item>
 </menu>

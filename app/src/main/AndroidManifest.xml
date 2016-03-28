@@ -22,12 +22,11 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-        android:name=".Welcome"
-        android:label="@string/app_title" />
-
-        <activity
             android:name=".ChangeLocation"
             android:label="Change Location" />
+
+        <activity
+            android:name=".Welcome" />
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
