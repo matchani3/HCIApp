@@ -33,4 +33,15 @@
         android:typeface="normal"
         android:visibility="visible" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue without Login"
+        android:id="@+id/noLoginButton"
+        android:layout_gravity="center_horizontal"
+        android:background="#1ccc01"
+        android:layout_marginTop="30dp"
+        android:onClick="withoutLogin"
+        android:textColor="#ffffff" />
+
 </LinearLayout>
