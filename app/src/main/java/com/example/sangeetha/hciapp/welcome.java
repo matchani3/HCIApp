@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by sangeetha on 3/26/16.
  */
-public class Welcome extends Activity {
+public class welcome extends Activity {
 
     ArrayList<String> searchList;
 
@@ -90,7 +90,7 @@ public class Welcome extends Activity {
     }
 
     public void changeLocation(){
-        Intent chnge_location = new Intent(Welcome.this, ChangeLocation.class);
+        Intent chnge_location = new Intent(welcome.this, ChangeLocation.class);
         startActivity(chnge_location);
     }
 
@@ -99,7 +99,7 @@ public class Welcome extends Activity {
     }
 
     public void showHomePage(){
-        Intent backToHome = new Intent(Welcome.this, MainActivity.class);
+        Intent backToHome = new Intent(welcome.this, MainActivity.class);
         startActivity(backToHome);
     }
     @Override

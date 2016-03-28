@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void withoutLogin(View V){
-        Intent continueWithoutLogin = new Intent(MainActivity.this, Welcome.class);
+        Intent continueWithoutLogin = new Intent(MainActivity.this, welcome.class);
         startActivity(continueWithoutLogin);
     }
     public void signIn(View V) {
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                             "Congrats: Login Successfull", Toast.LENGTH_LONG)
                             .show();
                     dialog.dismiss();
-                    Intent firstScreen = new Intent(MainActivity.this, Welcome.class);
+                    Intent firstScreen = new Intent(MainActivity.this, welcome.class);
                     startActivity(firstScreen);
                 } else {
                     Toast.makeText(MainActivity.this,

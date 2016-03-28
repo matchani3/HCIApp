@@ -33,7 +33,7 @@ public class ChangeLocation extends Activity {
                 "Location changed to " + location,
                 Toast.LENGTH_LONG).show();
 
-                Intent backtoIntroPage = new Intent(ChangeLocation.this, Welcome.class);
+                Intent backtoIntroPage = new Intent(ChangeLocation.this, welcome.class);
                 startActivity(backtoIntroPage);
             }
         });
