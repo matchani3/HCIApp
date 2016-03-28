@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    // comment from tanyaaaa
+    // comment from tanyaaaaa
     Button btnSignIn, btnSignUp;
     LoginDataBaseAdapter loginDataBaseAdapter;
 
