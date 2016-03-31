@@ -1,4 +1,4 @@
-package com.example.sangeetha.mapdifferent;
+package com.example.sangeetha.hciapp;
 
 /**
  * Created by sangeetha on 3/30/16.

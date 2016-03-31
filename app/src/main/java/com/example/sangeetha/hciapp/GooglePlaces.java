@@ -1,4 +1,4 @@
-package com.example.sangeetha.mapdifferent;
+package com.example.sangeetha.hciapp;
 
 /**
  * Created by sangeetha on 3/30/16.
@@ -43,7 +43,8 @@ public class GooglePlaces {
      * @param types - type of place to search
      * @return list of places
      * */
-    public PlacesList search(double latitude, double longitude, double radius, String types)
+
+    PlacesList search(double latitude, double longitude, double radius, String types)
             throws Exception {
 
         this._latitude = latitude;
@@ -76,7 +77,7 @@ public class GooglePlaces {
 
     }
 
-    public PlaceDetails getPlaceDetails(String reference) throws Exception {
+    PlaceDetails getPlaceDetails(String reference) throws Exception {
         try {
 
             HttpRequestFactory httpRequestFactory = createRequestFactory(HTTP_TRANSPORT);

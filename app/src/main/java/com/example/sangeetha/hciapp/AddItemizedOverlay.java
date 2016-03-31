@@ -1,10 +1,8 @@
-package com.example.sangeetha.mapdifferent;
+package com.example.sangeetha.hciapp;
 
 /**
  * Created by sangeetha on 3/30/16.
  */
-import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +13,8 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
+
+import java.util.ArrayList;
 
 /**
  * Class used to place marker or any overlay items on Map

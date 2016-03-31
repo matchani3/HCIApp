@@ -1,10 +1,11 @@
-package com.example.sangeetha.mapdifferent;
+package com.example.sangeetha.hciapp;
 
 /**
  * Created by sangeetha on 3/30/16.
  */
-import java.io.Serializable;
 import com.google.api.client.util.Key;
+
+import java.io.Serializable;
 
 /** Implement this class from "Serializable"
  * So that you can pass this class Object to another using Intents

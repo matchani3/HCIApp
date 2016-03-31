@@ -36,9 +36,6 @@
         <activity android:name=".SinglePlaceActivity" android:label="Place Details">
         </activity>
 
-        <!-- PlacesMapActivity -->
-        <activity android:name=".PlacesMapActivity" android:label="Near Places Map View">
-        </activity>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDSg-raLHLxMPzngqlDXUsu41bTRslX42w"/>
