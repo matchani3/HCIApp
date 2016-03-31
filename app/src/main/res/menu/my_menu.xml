@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item  android:id="@+id/id_location"
         android:title="Change Location">
 
@@ -11,5 +12,9 @@
 
     <item  android:id="@+id/id_back_to_home"
         android:title="Home">
+    </item>
+
+    <item  android:id="@+id/id_logout"
+        android:title="Logout">
     </item>
 </menu>

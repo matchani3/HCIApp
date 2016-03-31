@@ -84,6 +84,9 @@ public class welcome extends Activity {
             case R.id.id_back_to_home:
                 showHomePage();
                 return true;
+            case R.id.id_logout:
+                logOut();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -99,6 +102,11 @@ public class welcome extends Activity {
     }
 
     public void showHomePage(){
+        Intent backToHome = new Intent(welcome.this, welcome.class);
+        startActivity(backToHome);
+    }
+
+    public void logOut(){
         Intent backToHome = new Intent(welcome.this, MainActivity.class);
         startActivity(backToHome);
     }
