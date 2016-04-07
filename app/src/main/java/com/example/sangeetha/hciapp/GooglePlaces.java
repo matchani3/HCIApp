@@ -87,6 +87,8 @@ public class GooglePlaces {
             request.getUrl().put("reference", reference);
             request.getUrl().put("sensor", "false");
 
+            Log.d("Detail Request is ", request.getUrl().toString());
+
             PlaceDetails place = request.execute().parseAs(PlaceDetails.class);
 
             return place;

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
@@ -74,6 +75,7 @@ public class welcome extends Activity {
     public static String KEY_REFERENCE = "reference"; // id of the place
     public static String KEY_NAME = "name"; // name of the place
     public static String KEY_VICINITY = "vicinity"; // Place area name
+    public static String KEY_DISTANCE = "0"; // distance between current location and found location
     String term_to_search;
 
     @Override
@@ -243,7 +245,8 @@ public class welcome extends Activity {
                      * */
                     // Get json response status
                     String status = nearPlaces.status;
-                    if (status == null) {
+                    Log.d("Status is ", status);
+                    if (status.equals(null) || (status.equals("null"))) {
                         alert.showAlertDialog(welcome.this, "Internet Connection Error",
                                 "Poor Internet Connection", false);
                         // stop executing code by return
@@ -258,6 +261,18 @@ public class welcome extends Activity {
                             for (Place p : nearPlaces.results) {
                                 HashMap<String, String> map = new HashMap<String, String>();
 
+                                Location currentLocation = new Location("Current");
+                                currentLocation.setLatitude(gps.getLatitude());
+                                currentLocation.setLatitude(gps.getLongitude());
+
+                                Location resultLocation = new Location("result");
+                                resultLocation.setLatitude(p.geometry.location.lat);
+                                resultLocation.setLatitude(p.geometry.location.lng);
+
+                                String floatToString = String.format("%.2f", (currentLocation.distanceTo(resultLocation))/((float) 1609.344));
+                                floatToString += " mi";
+
+
                                 // Place reference won't display in listview - it will be hidden
                                 // Place reference is used to get "place full details"
                                 map.put(KEY_REFERENCE, p.reference);
@@ -265,14 +280,20 @@ public class welcome extends Activity {
                                 // Place name
                                 map.put(KEY_NAME, p.name);
 
+                                // place vicinity
+                                map.put(KEY_VICINITY, p.vicinity);
+
+                                // place distance
+                                map.put(KEY_DISTANCE, floatToString);
+
                                 // adding HashMap to ArrayList
                                 placesListItems.add(map);
                             }
                             // list adapter
                             ListAdapter adapter = new SimpleAdapter(welcome.this, placesListItems,
                                     R.layout.list_item,
-                                    new String[]{KEY_REFERENCE, KEY_NAME}, new int[]{
-                                    R.id.reference, R.id.name});
+                                    new String[]{KEY_REFERENCE, KEY_NAME, KEY_VICINITY, KEY_DISTANCE}, new int[]{
+                                    R.id.reference, R.id.name, R.id.vicinity, R.id.distance});
 
                             // Adding data into listview
                             lv.setAdapter(adapter);

@@ -23,7 +23,13 @@ public class Place implements Serializable {
     public String reference;
 
     @Key
-    public String icon;
+    public String icon; // use icon
+
+    // add opening hours
+    // add photos (maybe)
+
+    @Key
+    public Double rating;
 
     @Key
     public String vicinity;
