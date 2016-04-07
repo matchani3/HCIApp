@@ -196,7 +196,6 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
                                 TextView lbl_name = (TextView) findViewById(R.id.name);
                                 TextView lbl_address = (TextView) findViewById(R.id.address);
                                 TextView lbl_phone = (TextView) findViewById(R.id.phone);
-                                TextView lbl_location = (TextView) findViewById(R.id.location);
 
                                 // Check for null data from google
                                 // Sometimes place details might missing
@@ -247,6 +246,14 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
                                 // Placing a marker on the touched position
                                 mGoogleMap.addMarker(markerOptions);
 
+                                Location selectedLocation = new Location("selected_location");
+                                selectedLocation.setLatitude(lat);
+                                selectedLocation.setLongitude(lng);
+                                if(selectedLocation!=null){
+                                    onLocationChanged(selectedLocation);
+                                }
+
+
                             }
                         } else if (status.equals("ZERO_RESULTS")) {
                             alert.showAlertDialog(SinglePlaceActivity.this, "Near Places",
@@ -295,7 +302,7 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
         LatLng latLng = new LatLng(mLatitude, mLongitude);
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+        mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
     }
 
     @Override

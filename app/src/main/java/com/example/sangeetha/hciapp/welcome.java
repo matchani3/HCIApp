@@ -36,7 +36,7 @@ public class welcome extends Activity {
 
     Spinner mSprPlaceType;
 
-    String[] mPlaceType=null;
+//    String[] mPlaceType=null;
     String[] mPlaceTypeName=null;
 
 
@@ -85,7 +85,7 @@ public class welcome extends Activity {
         MultiDex.install(this);
 
         // Array of place types
-        mPlaceType = getResources().getStringArray(R.array.place_type);
+//        mPlaceType = getResources().getStringArray(R.array.place_type);
 
         // Array of place type names
         mPlaceTypeName = getResources().getStringArray(R.array.place_type_name);
@@ -148,8 +148,12 @@ public class welcome extends Activity {
             @Override
             public void onClick(View v) {
                 placesListItems.clear();
+                char c[] = mSprPlaceType.getSelectedItem().toString().toCharArray();
+                c[0] = Character.toLowerCase(c[0]);
+                String type = new String(c);
+                Log.d("Type is ", type);
                 int selectedPosition = mSprPlaceType.getSelectedItemPosition();
-                String type = mPlaceType[selectedPosition];
+//                String type = mPlaceType[selectedPosition];
                 term_to_search = type;
                 // calling background Async task to load Google Places
                 // After getting places from Google all the data is shown in listview
@@ -214,7 +218,7 @@ public class welcome extends Activity {
                 String types = term_to_search; // Listing places only cafes, restaurants
 
                 // Radius in meters - increase this value if you don't find any places
-                double radius = 5000; // 5000 meters
+                double radius = 16093.4; // in meters -- 10 miles
 
                 // get nearest places
                 nearPlaces = googlePlaces.search(gps.getLatitude(),
