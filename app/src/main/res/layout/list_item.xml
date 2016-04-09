@@ -16,7 +16,7 @@
         android:textStyle="bold"
         android:textSize="16dip"
         android:layout_below="@+id/reference"
-        android:textColor="#426edd"/>
+        android:textColor="#ff9100"/>
 
     <TextView android:id="@+id/vicinity"
         android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:padding="5dip"
         android:textSize="12dip"
-        android:textColor="#647cda"
+        android:textColor="#f9b052"
         android:layout_alignTop="@+id/vicinity"
         android:layout_alignParentEnd="true"
         android:textStyle="bold"/>

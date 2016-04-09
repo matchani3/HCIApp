@@ -87,6 +87,7 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_place);
+
         // Getting reference to the SupportMapFragment
 
         SupportMapFragment fragment = ( SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -184,6 +185,7 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
                         if (status.equals("OK")) {
                             if (placeDetails.result != null) {
                                 String name = placeDetails.result.name;
+                                getActionBar().setTitle(name);
                                 String address = placeDetails.result.formatted_address;
                                 String phone = placeDetails.result.formatted_phone_number;
                                 String latitude = Double.toString(placeDetails.result.geometry.location.lat);

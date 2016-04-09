@@ -2,43 +2,26 @@ package com.example.sangeetha.hciapp;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 
 public class welcome extends Activity {
 
-    Spinner mSprPlaceType;
-
-//    String[] mPlaceType=null;
     String[] mPlaceTypeName=null;
-
 
     // flag for Internet connection status
     Boolean isInternetPresent = false;
@@ -49,34 +32,12 @@ public class welcome extends Activity {
     // Alert Dialog Manager
     AlertDialogManager alert = new AlertDialogManager();
 
-    // Google Places
-    GooglePlaces googlePlaces;
-
-    // Places List
-    PlacesList nearPlaces;
-
     // GPS Location
     GPSTracker gps;
 
-    // Button
-    Button btnShowOnMap;
+    ListView allOptionsList;
 
-    // Progress dialog
-    ProgressDialog pDialog;
-
-    // Places Listview
-    ListView lv;
-
-    // ListItems data
-    ArrayList<HashMap<String, String>> placesListItems = new ArrayList<HashMap<String,String>>();
-
-
-    // KEY Strings
-    public static String KEY_REFERENCE = "reference"; // id of the place
-    public static String KEY_NAME = "name"; // name of the place
-    public static String KEY_VICINITY = "vicinity"; // Place area name
-    public static String KEY_DISTANCE = "0"; // distance between current location and found location
-    String term_to_search;
+    public static String TERM_TO_SEARCH = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,29 +45,9 @@ public class welcome extends Activity {
         setContentView(R.layout.first_screen);
         MultiDex.install(this);
 
-        // Array of place types
-//        mPlaceType = getResources().getStringArray(R.array.place_type);
-
-        // Array of place type names
-        mPlaceTypeName = getResources().getStringArray(R.array.place_type_name);
-
-        // Creating an array adapter with an array of Place types
-        // to populate the spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, mPlaceTypeName);
-
-        // Getting reference to the Spinner
-        mSprPlaceType = (Spinner) findViewById(R.id.spr_place_type);
-
-        // Setting adapter on Spinner to set place types
-        mSprPlaceType.setAdapter(adapter);
-
-        Button btnFind;
-        // Getting reference to Find Button
-        btnFind = ( Button ) findViewById(R.id.btn_find);
-
         Boolean status = this.isGooglePlayServicesAvailable(this);
 
-        if(status!=true){ // Google Play Services are not available
+        if (status != true) { // Google Play Services are not available
 
             int requestCode = 10;
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(0, this, requestCode);
@@ -140,200 +81,63 @@ public class welcome extends Activity {
             return;
         }
 
-        // Getting listview
-        lv = (ListView) findViewById(R.id.list);
+        // Array of place type names
+        mPlaceTypeName = getResources().getStringArray(R.array.place_type_name);
+        allOptionsList = (ListView) findViewById(R.id.allOptions);
 
-        btnFind.setOnClickListener(new View.OnClickListener() {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                mPlaceTypeName );
 
-            @Override
-            public void onClick(View v) {
-                placesListItems.clear();
-                char c[] = mSprPlaceType.getSelectedItem().toString().toCharArray();
-                c[0] = Character.toLowerCase(c[0]);
-                String type = new String(c);
-                Log.d("Type is ", type);
-                int selectedPosition = mSprPlaceType.getSelectedItemPosition();
-//                String type = mPlaceType[selectedPosition];
-                term_to_search = type;
-                // calling background Async task to load Google Places
-                // After getting places from Google all the data is shown in listview
-                new LoadPlaces().execute();
-            }
-        });
+        allOptionsList.setAdapter(arrayAdapter);
 
-        /**
-         * ListItem click event
-         * On selecting a listitem SinglePlaceActivity is launched
-         * */
-        lv.setOnItemClickListener(new OnItemClickListener() {
+        allOptionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-//                 lv.setAdapter(null);
-                // getting values from selected ListItem
-                String reference = ((TextView) view.findViewById(R.id.reference)).getText().toString();
 
-                // Starting new intent
+                // ListView Clicked item index
+                int itemPosition= position;
+
+                // ListView Clicked item value
+                String itemName= (String) allOptionsList.getItemAtPosition(position);
+                itemName = itemName.replaceAll(" ", "_").toLowerCase();
+                Log.d("Type is ", itemName);
+
+//                Starting new intent
                 Intent in = new Intent(getApplicationContext(),
-                        SinglePlaceActivity.class);
+                        DisplayAllResults.class);
 
-                // Sending place refrence id to single place activity
-                // place refrence id used to get "Place full details"
-                in.putExtra(KEY_REFERENCE, reference);
+                // Sending term to search for to DisplayAllResult activity
+                in.putExtra(TERM_TO_SEARCH, itemName);
                 startActivity(in);
+
+
             }
         });
-    }
 
-    /**
-     * Background Async Task to Load Google places
-     * */
-    class LoadPlaces extends AsyncTask<String, String, String> {
-        /**
-         * Before starting background thread Show Progress Dialog
-         * */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(welcome.this);
-            pDialog.setMessage(Html.fromHtml("<b>Search</b><br/>Loading Places..."));
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        /**
-         * getting Places JSON
-         * */
-        protected String doInBackground(String... args) {
-            // creating Places class object
-            googlePlaces = new GooglePlaces();
-
-            try {
-                // Separeate your place types by PIPE symbol "|"
-                // If you want all types places make it as null
-                // Check list of types supported by google
-                //
-                String types = term_to_search; // Listing places only cafes, restaurants
-
-                // Radius in meters - increase this value if you don't find any places
-                double radius = 16093.4; // in meters -- 10 miles
-
-                // get nearest places
-                nearPlaces = googlePlaces.search(gps.getLatitude(),
-                        gps.getLongitude(), radius, types);
-
-                Log.d("nearplace is ", nearPlaces.status);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        /**
-         * After completing background task Dismiss the progress dialog
-         * and show the data in UI
-         * Always use runOnUiThread(new Runnable()) to update UI from background
-         * thread, otherwise you will get error
-         * **/
-        protected void onPostExecute(String file_url) {
-            // dismiss the dialog after getting all products
-            pDialog.dismiss();
-            // updating UI from Background Thread
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    /**
-                     * Updating parsed Places into LISTVIEW
-                     * */
-                    // Get json response status
-                    String status = nearPlaces.status;
-                    Log.d("Status is ", status);
-                    if (status.equals(null) || (status.equals("null"))) {
-                        alert.showAlertDialog(welcome.this, "Internet Connection Error",
-                                "Poor Internet Connection", false);
-                        // stop executing code by return
-                        return;
-                    }
-
-                    // Check for all possible status
-                    if (status.equals("OK")) {
-                        // Successfully got places details
-                        if (nearPlaces.results != null) {
-                            // loop through each place
-                            for (Place p : nearPlaces.results) {
-                                HashMap<String, String> map = new HashMap<String, String>();
-
-                                Location currentLocation = new Location("Current");
-                                currentLocation.setLatitude(gps.getLatitude());
-                                currentLocation.setLatitude(gps.getLongitude());
-
-                                Location resultLocation = new Location("result");
-                                resultLocation.setLatitude(p.geometry.location.lat);
-                                resultLocation.setLatitude(p.geometry.location.lng);
-
-                                String floatToString = String.format("%.2f", (currentLocation.distanceTo(resultLocation))/((float) 1609.344));
-                                floatToString += " mi";
-
-
-                                // Place reference won't display in listview - it will be hidden
-                                // Place reference is used to get "place full details"
-                                map.put(KEY_REFERENCE, p.reference);
-
-                                // Place name
-                                map.put(KEY_NAME, p.name);
-
-                                // place vicinity
-                                map.put(KEY_VICINITY, p.vicinity);
-
-                                // place distance
-                                map.put(KEY_DISTANCE, floatToString);
-
-                                // adding HashMap to ArrayList
-                                placesListItems.add(map);
-                            }
-                            // list adapter
-                            ListAdapter adapter = new SimpleAdapter(welcome.this, placesListItems,
-                                    R.layout.list_item,
-                                    new String[]{KEY_REFERENCE, KEY_NAME, KEY_VICINITY, KEY_DISTANCE}, new int[]{
-                                    R.id.reference, R.id.name, R.id.vicinity, R.id.distance});
-
-                            // Adding data into listview
-                            lv.setAdapter(adapter);
-
-                        }
-                    } else if (status.equals("ZERO_RESULTS")) {
-                        // Zero results found
-                        alert.showAlertDialog(welcome.this, "Near Places",
-                                "Sorry no places found. Try to change the types of places",
-                                false);
-                    } else if (status.equals("UNKNOWN_ERROR")) {
-                        alert.showAlertDialog(welcome.this, "Places Error",
-                                "Sorry unknown error occured.",
-                                false);
-                    } else if (status.equals("OVER_QUERY_LIMIT")) {
-                        alert.showAlertDialog(welcome.this, "Places Error",
-                                "Sorry query limit to google places is reached",
-                                false);
-                    } else if (status.equals("REQUEST_DENIED")) {
-                        alert.showAlertDialog(welcome.this, "Places Error",
-                                "Sorry error occured. Request is denied",
-                                false);
-                    } else if (status.equals("INVALID_REQUEST")) {
-                        alert.showAlertDialog(welcome.this, "Places Error",
-                                "Sorry error occured. Invalid Request",
-                                false);
-                    } else {
-                        alert.showAlertDialog(welcome.this, "Places Error",
-                                "Sorry error occured.",
-                                false);
-                    }
-                }
-            });
-
-        }
-
+//        btnFind.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                String itemname = mSprPlaceType.getSelectedItem().toString().replaceAll(" ", "_").toLowerCase();
+//                char c[] = mSprPlaceType.getSelectedItem().toString().toCharArray();
+//                c[0] = Character.toLowerCase(c[0]);
+//                String type = new String(c);
+//                Log.d("Type is ", itemname);
+//                int selectedPosition = mSprPlaceType.getSelectedItemPosition();
+//
+////                 Starting new intent
+//                Intent in = new Intent(getApplicationContext(),
+//                        DisplayAllResults.class);
+//
+//                // Sending term to search for to DisplayAllResult activity
+//                in.putExtra(TERM_TO_SEARCH, itemname);
+//                startActivity(in);
+//            }
+//        });
     }
 
     @Override

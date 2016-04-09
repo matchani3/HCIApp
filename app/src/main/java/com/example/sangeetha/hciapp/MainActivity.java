@@ -12,8 +12,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    // comment from tanyaaaaa
-    // comment from nikhil
     Button btnSignIn, btnSignUp;
     LoginDataBaseAdapter loginDataBaseAdapter;
 
