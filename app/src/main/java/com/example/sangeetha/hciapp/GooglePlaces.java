@@ -20,6 +20,7 @@ import org.apache.http.client.HttpResponseException;
 @SuppressWarnings("deprecation")
 public class GooglePlaces {
 
+    AlertDialogManager alert = new AlertDialogManager();
     /** Global instance of the HTTP transport. */
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 
@@ -28,8 +29,8 @@ public class GooglePlaces {
 
     // Google Places serach url's
     private static final String PLACES_SEARCH_URL = "https://maps.googleapis.com/maps/api/place/search/json?";
-    private static final String PLACES_TEXT_SEARCH_URL = "https://maps.googleapis.com/maps/api/place/search/json?";
     private static final String PLACES_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json?";
+    private static final String LOCATION_SEARCH_URL = "http://maps.googleapis.com/maps/api/geocode/json?";
 
     private double _latitude;
     private double _longitude;
@@ -77,7 +78,7 @@ public class GooglePlaces {
 
     }
 
-    PlaceDetails getPlaceDetails(String reference) throws Exception {
+     PlaceDetails getPlaceDetails(String reference) throws Exception {
         try {
 
             HttpRequestFactory httpRequestFactory = createRequestFactory(HTTP_TRANSPORT);
@@ -89,12 +90,32 @@ public class GooglePlaces {
 
             Log.d("Detail Request is ", request.getUrl().toString());
 
-            PlaceDetails place = request.execute().parseAs(PlaceDetails.class);
+           PlaceDetails place = request.execute().parseAs(PlaceDetails.class);
 
             return place;
 
         } catch (HttpResponseException e) {
 //            Log.e("Error in Perform Details", e.getMessage());
+            throw e;
+        }
+    }
+
+    ResultFromUserInput getNewLocation(String userLocation) throws Exception {
+        try {
+
+            HttpRequestFactory httpRequestFactory = createRequestFactory(HTTP_TRANSPORT);
+            HttpRequest request = httpRequestFactory
+                    .buildGetRequest(new GenericUrl(LOCATION_SEARCH_URL));
+            request.getUrl().put("address", userLocation);
+
+            Log.d("Location request is ", request.getUrl().toString());
+
+            ResultFromUserInput list = request.execute().parseAs(ResultFromUserInput.class);
+
+            return list;
+
+        } catch (HttpResponseException e) {
+            Log.e("Error in get location", e.getMessage());
             throw e;
         }
     }

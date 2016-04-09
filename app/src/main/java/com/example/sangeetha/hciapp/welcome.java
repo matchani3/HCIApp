@@ -75,8 +75,21 @@ public class welcome extends Activity {
             return;
         }
 
-        // creating GPS Class object
-        gps = new GPSTracker(this);
+        RetrieveNewLocation newLcn = ((RetrieveNewLocation)getApplicationContext());
+        if(newLcn.getUserLatitude() == 0.0 && newLcn.getUserLontitude() == 0.0){
+            // creating GPS Class object
+            gps = new GPSTracker(this);
+            Log.d("my locatio is", "Gainesville");
+        }
+        else{
+            gps = new GPSTracker(this);
+            gps.latitude = newLcn.getUserLatitude();
+            gps.longitude = newLcn.getUserLontitude();
+
+            Log.d("Lat from welcome class ", Double.toString(gps.latitude));
+            Log.d("Long from welcome clas ", Double.toString(gps.longitude));
+
+        }
 
         // check if GPS location can get
         if (gps.canGetLocation()) {
@@ -127,26 +140,6 @@ public class welcome extends Activity {
             }
         });
 
-//        btnFind.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                String itemname = mSprPlaceType.getSelectedItem().toString().replaceAll(" ", "_").toLowerCase();
-//                char c[] = mSprPlaceType.getSelectedItem().toString().toCharArray();
-//                c[0] = Character.toLowerCase(c[0]);
-//                String type = new String(c);
-//                Log.d("Type is ", itemname);
-//                int selectedPosition = mSprPlaceType.getSelectedItemPosition();
-//
-////                 Starting new intent
-//                Intent in = new Intent(getApplicationContext(),
-//                        DisplayAllResults.class);
-//
-//                // Sending term to search for to DisplayAllResult activity
-//                in.putExtra(TERM_TO_SEARCH, itemname);
-//                startActivity(in);
-//            }
-//        });
     }
 
     @Override

@@ -77,8 +77,20 @@ public class DisplayAllResults extends Activity {
 
         lv = (ListView) findViewById(R.id.list);
 
-        // creating GPS Class object
-        gps = new GPSTracker(this);
+        RetrieveNewLocation newLcn = ((RetrieveNewLocation)getApplicationContext());
+        if(newLcn.getUserLatitude() == 0.0 && newLcn.getUserLontitude() == 0.0){
+            // creating GPS Class object
+            gps = new GPSTracker(this);
+            Log.d("my locatio is", "Gainesville");
+        }
+        else{
+            gps = new GPSTracker(this);
+            gps.latitude = newLcn.getUserLatitude();
+            gps.longitude = newLcn.getUserLontitude();
+            Log.d("Lat from welcome class ", Double.toString(gps.latitude));
+            Log.d("Long from welcome clas ", Double.toString(gps.longitude));
+
+        }
 
         // check if GPS location can get
         if (gps.canGetLocation()) {
