@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sangeetha.hciapp">
+    package="com.example.sangeetha.hciapp"
+    >
 
     <application
         android:allowBackup="true"
         android:label="@string/app_title"
         android:supportsRtl="true"
-        android:icon="@drawable/bystateicon">
+        android:icon="@drawable/smile"
+        >
         <uses-library
             android:name="com.google.android.maps"
             android:required="true"
@@ -37,6 +39,11 @@
         <activity
             android:name=".DisplayAllResults"
             android:label= "Search Results"
+            />
+
+        <activity
+            android:name=".ContactUs"
+            android:label= "Contact Us"
             />
 
         <meta-data

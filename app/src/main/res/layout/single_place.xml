@@ -5,59 +5,59 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:padding="10dip">
-
-    <!-- Name Label -->
-    <TextView
-        android:text="Name:"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:layout_marginBottom="5dip"
-        android:textStyle="bold"/>
+    android:background="#ffffff"
+    android:padding="10dp">
 
     <!--  Name Value -->
     <TextView
         android:id="@+id/name"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
-
-    <!-- Address Label -->
-    <TextView
-        android:text="Address:"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dip"
-        android:layout_marginBottom="5dip"
-        android:textStyle="bold"/>
+        android:color="#000000"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"/>
 
     <!--  Address Value -->
     <TextView
         android:id="@+id/address"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:color="#000000"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"/>
 
     <!-- Phone Number Label -->
     <TextView
         android:id="@+id/phone"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"/>
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:autoLink="phone" />
 
 
-    <!-- Location Value -->
+    <!-- Website Value -->
     <TextView
-        android:id="@+id/location"
+        android:id="@+id/website"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dip"
-        android:layout_marginBottom="5dip"/>
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:autoLink="web"/>
+
+    <!-- Ratings Value -->
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/location"
+        android:layout_below="@id/rating"
         class="com.google.android.gms.maps.SupportMapFragment" />
 
 

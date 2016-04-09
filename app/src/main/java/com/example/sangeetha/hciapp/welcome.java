@@ -4,15 +4,19 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.app.ActionBar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -44,6 +48,11 @@ public class welcome extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_screen);
         MultiDex.install(this);
+
+        ActionBar actionBar;
+        actionBar = getActionBar();
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#0044ff"));
+        actionBar.setBackgroundDrawable(colorDrawable);
 
         Boolean status = this.isGooglePlayServicesAvailable(this);
 
@@ -143,8 +152,29 @@ public class welcome extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
+        menuInflater.inflate(R.menu.my_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.id_location:
+                MenuOptions m = new MenuOptions(getApplicationContext());
+                m.changeLocation();
+                return true;
+            case R.id.id_back_to_home:
+                MenuOptions m1 = new MenuOptions(getApplicationContext());
+                m1.backToHome();
+                return true;
+            case R.id.contact_us:
+                MenuOptions m2 = new MenuOptions(getApplicationContext());
+                m2.contactUs();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public boolean isGooglePlayServicesAvailable(Context context) {

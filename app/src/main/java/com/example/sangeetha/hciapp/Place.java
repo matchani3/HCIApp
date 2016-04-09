@@ -32,6 +32,9 @@ public class Place implements Serializable {
     public Double rating;
 
     @Key
+    public String website;
+
+    @Key
     public String vicinity;
 
     @Key
