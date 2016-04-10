@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,6 +37,10 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
     GoogleMap mGoogleMap;
     double mLatitude=0;
     double mLongitude=0;
+
+    // GPS Location
+    GPSTracker gps;
+
 
     // Alert Dialog Manager
     AlertDialogManager alert = new AlertDialogManager();
@@ -70,27 +75,51 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
         // Getting Google Map
         mGoogleMap = fragment.getMap();
 
-        // Enabling MyLocation in Google Map
-        mGoogleMap.setMyLocationEnabled(true);
+        RetrieveNewLocation newLcn = ((RetrieveNewLocation)getApplicationContext());
+        if( ( Double.compare(newLcn.getUserLatitude(),0.0) == 0 ) && ( Double.compare(newLcn.getUserLongtitude(), 0.0) == 0 ) ){
+            // creating GPS Class object
+            gps = new GPSTracker(this);
+            Log.d("my locatio is", "Gainesville");
 
-        // Getting LocationManager object from System Service LOCATION_SERVICE
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            // Getting LocationManager object from System Service LOCATION_SERVICE
+            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        // Creating a criteria object to retrieve provider
-        Criteria criteria = new Criteria();
+            // Creating a criteria object to retrieve provider
+            Criteria criteria = new Criteria();
 
-        // Getting the name of the best provider
-        String provider = locationManager.getBestProvider(criteria, true);
+            // Getting the name of the best provider
+            String provider = locationManager.getBestProvider(criteria, true);
 
-        // Getting Current Location From GPS
-        Location location = locationManager.getLastKnownLocation(provider);
-        System.out.print("location is " + location);
+            // Getting Current Location From GPS
+            Location location = locationManager.getLastKnownLocation(provider);
+            Log.d("location is ", location.toString());
 
-        if(location!=null){
-            onLocationChanged(location);
+            if(location!=null){
+                onLocationChanged(location);
+            }
+            locationManager.requestLocationUpdates(provider, 20000, 0, this);
+        }
+        else{
+            gps = new GPSTracker(this);
+            gps.latitude = newLcn.getUserLatitude();
+            gps.longitude = newLcn.getUserLongtitude();
+
+            Log.d("Lat from welcome class ", Double.toString(gps.latitude));
+            Log.d("Long from welcome clas ", Double.toString(gps.longitude));
+
+            Location location = new Location("selected");
+            location.setLatitude(gps.latitude);
+            location.setLongitude(gps.longitude);
+
+            if(location != null){
+                onLocationChanged(location);
+            }
+
         }
 
-        locationManager.requestLocationUpdates(provider, 20000, 0, this);
+
+        // Enabling MyLocation in Google Map
+        mGoogleMap.setMyLocationEnabled(true);
 
         Intent i = getIntent();
 
@@ -257,7 +286,7 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
                                 Location selectedLocation = new Location("selected_location");
                                 selectedLocation.setLatitude(lat);
                                 selectedLocation.setLongitude(lng);
-                                if(selectedLocation!=null){
+                                if(selectedLocation != null){
                                     onLocationChanged(selectedLocation);
                                 }
 
@@ -306,6 +335,7 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+        Log.d("location changed", "successfully");
     }
 
     @Override

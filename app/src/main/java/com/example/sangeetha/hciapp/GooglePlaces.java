@@ -100,7 +100,7 @@ public class GooglePlaces {
         }
     }
 
-    ResultFromUserInput getNewLocation(String userLocation) throws Exception {
+    PlacesList getNewLocation(String userLocation) throws Exception {
         try {
 
             HttpRequestFactory httpRequestFactory = createRequestFactory(HTTP_TRANSPORT);
@@ -110,7 +110,7 @@ public class GooglePlaces {
 
             Log.d("Location request is ", request.getUrl().toString());
 
-            ResultFromUserInput list = request.execute().parseAs(ResultFromUserInput.class);
+            PlacesList list = request.execute().parseAs(PlacesList.class);
 
             return list;
 

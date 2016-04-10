@@ -21,7 +21,7 @@ public class RetrieveNewLocation extends Application {
         Log.d("updated latitude with", Double.toString(userLatitude));
     }
 
-    public double getUserLontitude() {
+    public double getUserLongtitude() {
         return userLongtitude;
     }
 

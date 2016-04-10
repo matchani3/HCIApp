@@ -33,7 +33,7 @@ public class ChangeLocation extends Activity {
     // Google Places
     GooglePlaces googlePlaces;
     // Place Details
-    ResultFromUserInput placeDetails;
+    PlacesList placeDetails;
 
     // Progress dialog
     ProgressDialog pDialog;
@@ -133,10 +133,10 @@ public class ChangeLocation extends Activity {
                             // Successfully got places details
                             if (placeDetails.results != null) {
 
-                                for (Results p : placeDetails.results) {
+                                for (Place p : placeDetails.results) {
 
-                                    double lt = p.getGeometry().getLocation().getLat();
-                                    double ln = p.getGeometry().getLocation().getLng();
+                                    double lt = p.geometry.location.lat;
+                                    double ln = p.geometry.location.lng;
 
                                     Log.d("new latitude is ", Double.toString(lt));
                                     Log.d("new longtitude is ", Double.toString(ln));
@@ -157,29 +157,29 @@ public class ChangeLocation extends Activity {
                             }
                         } else if (status.equals("ZERO_RESULTS")) {
                             // Zero results found
-                            alert.showAlertDialog(ChangeLocation.this, "Near Places",
-                                    "Sorry no places found. Try to change the types of places",
+                            alert.showAlertDialog(ChangeLocation.this, "Location Error",
+                                    "Invalid location. Try to change the location",
                                     false);
                         } else if (status.equals("UNKNOWN_ERROR")) {
-                            alert.showAlertDialog(ChangeLocation.this, "Places Error",
+                            alert.showAlertDialog(ChangeLocation.this, "Location Error",
                                     "Sorry unknown error occured.",
                                     false);
                         } else if (status.equals("OVER_QUERY_LIMIT")) {
-                            alert.showAlertDialog(ChangeLocation.this, "Places Error",
+                            alert.showAlertDialog(ChangeLocation.this, "Location Error",
                                     "Sorry query limit to google places is reached",
                                     false);
                         } else if (status.equals("REQUEST_DENIED")) {
-                            alert.showAlertDialog(ChangeLocation.this, "Places Error",
+                            alert.showAlertDialog(ChangeLocation.this, "Location Error",
                                     "Sorry error occured. Request is denied",
                                     false);
                         } else if (status.equals("INVALID_REQUEST")) {
-                            alert.showAlertDialog(ChangeLocation.this, "Places Error",
+                            alert.showAlertDialog(ChangeLocation.this, "Location Error",
                                     "Sorry error occured. Invalid Request",
                                     false);
                         }
                     }
                     else {
-                        alert.showAlertDialog(ChangeLocation.this, "Places Error",
+                        alert.showAlertDialog(ChangeLocation.this, "Location Error",
                                 "Sorry error occured.",
                                 false);
                     }

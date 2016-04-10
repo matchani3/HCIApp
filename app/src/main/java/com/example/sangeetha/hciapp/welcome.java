@@ -76,7 +76,7 @@ public class welcome extends Activity {
         }
 
         RetrieveNewLocation newLcn = ((RetrieveNewLocation)getApplicationContext());
-        if(newLcn.getUserLatitude() == 0.0 && newLcn.getUserLontitude() == 0.0){
+        if( ( Double.compare(newLcn.getUserLatitude(),0.0) == 0 ) && ( Double.compare(newLcn.getUserLongtitude(), 0.0) == 0 ) ){
             // creating GPS Class object
             gps = new GPSTracker(this);
             Log.d("my locatio is", "Gainesville");
@@ -84,7 +84,7 @@ public class welcome extends Activity {
         else{
             gps = new GPSTracker(this);
             gps.latitude = newLcn.getUserLatitude();
-            gps.longitude = newLcn.getUserLontitude();
+            gps.longitude = newLcn.getUserLongtitude();
 
             Log.d("Lat from welcome class ", Double.toString(gps.latitude));
             Log.d("Long from welcome clas ", Double.toString(gps.longitude));
@@ -93,7 +93,7 @@ public class welcome extends Activity {
 
         // check if GPS location can get
         if (gps.canGetLocation()) {
-            Log.d("Your Location", "latitude:" + gps.getLatitude() + ", longitude: " + gps.getLongitude());
+            Log.d("Your Location from welc", "latitude:" + gps.latitude + ", longitude: " + gps.longitude);
         } else {
             // Can't get user's current location
             alert.showAlertDialog(welcome.this, "GPS Status",

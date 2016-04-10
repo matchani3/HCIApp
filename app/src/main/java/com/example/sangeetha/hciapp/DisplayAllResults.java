@@ -78,7 +78,7 @@ public class DisplayAllResults extends Activity {
         lv = (ListView) findViewById(R.id.list);
 
         RetrieveNewLocation newLcn = ((RetrieveNewLocation)getApplicationContext());
-        if(newLcn.getUserLatitude() == 0.0 && newLcn.getUserLontitude() == 0.0){
+        if( ( Double.compare(newLcn.getUserLatitude(),0.0) == 0 ) && ( Double.compare(newLcn.getUserLongtitude(), 0.0) == 0 ) ){
             // creating GPS Class object
             gps = new GPSTracker(this);
             Log.d("my locatio is", "Gainesville");
@@ -86,15 +86,15 @@ public class DisplayAllResults extends Activity {
         else{
             gps = new GPSTracker(this);
             gps.latitude = newLcn.getUserLatitude();
-            gps.longitude = newLcn.getUserLontitude();
-            Log.d("Lat from welcome class ", Double.toString(gps.latitude));
-            Log.d("Long from welcome clas ", Double.toString(gps.longitude));
+            gps.longitude = newLcn.getUserLongtitude();
+            Log.d("Lat from Display class ", Double.toString(gps.latitude));
+            Log.d("Long from Display clas ", Double.toString(gps.longitude));
 
         }
 
         // check if GPS location can get
         if (gps.canGetLocation()) {
-            Log.d("Your Location", "latitude:" + gps.getLatitude() + ", longitude: " + gps.getLongitude());
+            Log.d("Your Location from disp", "latitude:" + gps.latitude + ", longitude: " + gps.longitude);
         } else {
             // Can't get user's current location
             alert.showAlertDialog(DisplayAllResults.this, "GPS Status",
@@ -164,8 +164,11 @@ public class DisplayAllResults extends Activity {
                 double radius = 16093.4; // in meters -- 10 miles
 
                 // get nearest places
-                nearPlaces = googlePlaces.search(gps.getLatitude(),
-                        gps.getLongitude(),radius, types);
+                Log.d("latitude is",Double.toString(gps.latitude));
+                Log.d("longtitude is ",Double.toString(gps.longitude));
+
+                nearPlaces = googlePlaces.search(gps.latitude,
+                        gps.longitude,radius, types);
                 Log.d("got here", nearPlaces.results.toString());
                 Log.d("nearplace is ", nearPlaces.status);
 
@@ -209,8 +212,8 @@ public class DisplayAllResults extends Activity {
                                 HashMap<String, String> map = new HashMap<String, String>();
 
                                 Location currentLocation = new Location("Current");
-                                currentLocation.setLatitude(gps.getLatitude());
-                                currentLocation.setLatitude(gps.getLongitude());
+                                currentLocation.setLatitude(gps.latitude);
+                                currentLocation.setLatitude(gps.longitude);
 
                                 Location resultLocation = new Location("result");
                                 resultLocation.setLatitude(p.geometry.location.lat);
