@@ -3,34 +3,38 @@ package com.example.sangeetha.hciapp;
 /**
  * Created by sangeetha on 3/30/16.
  */
+
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.TextView;
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.InputStream;
+import java.util.List;
 
 public class SinglePlaceActivity extends FragmentActivity implements LocationListener  {
 
@@ -195,7 +199,17 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
                                 String latitude = Double.toString(placeDetails.result.geometry.location.lat);
                                 String longitude = Double.toString(placeDetails.result.geometry.location.lng);
                                 String webSite = placeDetails.result.website;
+                                String icon = placeDetails.result.icon;
+                                List<String> open_hours;
                                 String rating;
+
+                                if(placeDetails.result.opening_hours == null || placeDetails.result.opening_hours.weekday_text == null){
+                                    open_hours = null;
+                                }
+                                else{
+                                    open_hours = placeDetails.result.opening_hours.weekday_text;
+                                }
+
                                 if(placeDetails.result.rating == null){
                                     rating = null;
                                 }
@@ -212,6 +226,35 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
                                 TextView lbl_phone = (TextView) findViewById(R.id.phone);
                                 TextView lbl_website = (TextView) findViewById(R.id.website);
                                 TextView lbl_rating = (TextView) findViewById(R.id.rating);
+                                TextView lbl_contact_us = (TextView) findViewById(R.id.contact_label);
+                                TextView lbl_open_hours = (TextView) findViewById(R.id.hours);
+                                TextView lbl_hours_label = (TextView) findViewById(R.id.hours_label);
+                                ImageView lbl_icon = (ImageView)findViewById(R.id.imageView);
+
+                                if(open_hours == null || open_hours.isEmpty()){
+                                    lbl_hours_label.setVisibility(View.GONE);
+                                    lbl_open_hours.setVisibility(View.GONE);
+                                }
+                                else{
+                                    Log.d("open hours found", "yes");
+                                    String all_hours="";
+                                    for( Object str: open_hours){
+                                        Log.d("String is ", str.toString());
+                                        all_hours+=str;
+                                        all_hours+="\n";
+                                    }
+
+                                    lbl_open_hours.setText(all_hours);
+                                }
+
+                                if(icon == null){
+                                    Log.d("icon is ", "null");
+                                    lbl_icon.setVisibility(View.GONE);
+                                }
+                                else{
+                                    new DownloadImageTask((ImageView) findViewById(R.id.imageView))
+                                            .execute(icon);
+                                }
 
                                 if(name == null){
                                     lbl_name.setVisibility(View.GONE);
@@ -220,25 +263,31 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
                                     lbl_name.setText(Html.fromHtml("<b>Name:</b> " + name));
                                 }
 
-                                if(address == null){
-                                    lbl_address.setVisibility(View.GONE);
-                                }
-                                else{
-                                    lbl_address.setText(Html.fromHtml("<b>Address:</b> " + address));
+                                if(webSite == null && phone == null){
+                                        Log.d("got here", "i am here");
+                                        lbl_contact_us.setVisibility(View.GONE);
+
                                 }
 
                                 if(phone == null){
                                     lbl_phone.setVisibility(View.GONE);
                                 }
                                 else{
-                                    lbl_phone.setText(Html.fromHtml("<b>Phone:</b> " + phone));
+                                    lbl_phone.setText(Html.fromHtml("<b>Phone: "+phone + "</b>"));
                                 }
 
                                 if(webSite == null){
                                     lbl_website.setVisibility(View.GONE);
                                 }
                                 else{
-                                    lbl_website.setText(Html.fromHtml("<b>Website:</b> " + webSite));
+                                    lbl_website.setText(Html.fromHtml("<b>Website: " + webSite + "</b>"));
+                                }
+
+                                if(address == null){
+                                    lbl_address.setVisibility(View.GONE);
+                                }
+                                else{
+                                    lbl_address.setText(Html.fromHtml("<b>Address:</b> " + address));
                                 }
 
                                 if(rating == null){
@@ -327,6 +376,31 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
 
         }
     }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
     @Override
     public void onLocationChanged(Location location) {
         mLatitude = location.getLatitude();
@@ -375,6 +449,10 @@ public class SinglePlaceActivity extends FragmentActivity implements LocationLis
             case R.id.contact_us:
                 MenuOptions m2 = new MenuOptions(getApplicationContext());
                 m2.contactUs();
+                return true;
+            case R.id.about_us:
+                MenuOptions m3 = new MenuOptions(getApplicationContext());
+                m3.aboutApp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -8,7 +8,7 @@
         android:id="@+id/allOptions"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
+        android:textColor="#003cff"
         android:background="#ff6a00"
         android:divider="#ffffff"
         android:dividerHeight="1dp"/>

@@ -15,7 +15,7 @@
     </item>
 
     <item  android:id="@+id/about_us"
-        android:title="About Us">
+        android:title="About App">
     </item>
 
 </menu>

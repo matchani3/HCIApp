@@ -55,8 +55,8 @@ public class DisplayAllResults extends Activity {
     public static String KEY_NAME = "name"; // name of the place
     public static String KEY_VICINITY = "vicinity"; // Place area name
     public static String KEY_DISTANCE = "0"; // distance between current location and found location
-    public static String TERM_TO_SEARCH = "";
-    String search_term;
+    public static String PASS = "";
+    String title_for_menu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,8 +72,10 @@ public class DisplayAllResults extends Activity {
         Intent i = getIntent();
 
         // Place referece id
-        search_term = i.getStringExtra(TERM_TO_SEARCH);
-        this.getActionBar().setTitle(search_term);
+
+        title_for_menu = i.getStringExtra(PASS);
+
+        this.getActionBar().setTitle(title_for_menu);
 
         lv = (ListView) findViewById(R.id.list);
 
@@ -106,7 +108,7 @@ public class DisplayAllResults extends Activity {
 
         placesListItems.clear();
         // Calling a Async Background thread
-        new LoadPlaces().execute(search_term);
+        new LoadPlaces().execute(title_for_menu);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -158,7 +160,9 @@ public class DisplayAllResults extends Activity {
                 // If you want all types places make it as null
                 // Check list of types supported by google
                 //
-                String types = search_term; // Listing places only cafes, restaurants
+                Log.d("srh term again is ", title_for_menu);
+                String types = title_for_menu.replaceAll(" ", "_").toLowerCase();; // Listing places only cafes, restaurants
+                Log.d("type is ", types);
 
                 // Radius in meters - increase this value if you don't find any places
                 double radius = 16093.4; // in meters -- 10 miles
@@ -304,6 +308,10 @@ public class DisplayAllResults extends Activity {
             case R.id.contact_us:
                 MenuOptions m2 = new MenuOptions(getApplicationContext());
                 m2.contactUs();
+                return true;
+            case R.id.about_us:
+                MenuOptions m3 = new MenuOptions(getApplicationContext());
+                m3.aboutApp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

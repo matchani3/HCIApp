@@ -82,7 +82,7 @@ public class ChangeLocation extends Activity {
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(ChangeLocation.this);
-            pDialog.setMessage(Html.fromHtml("<b>Search</b><br/>Changing Location..."));
+            pDialog.setMessage(Html.fromHtml("<br/>Changing Location..."));
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -309,6 +309,10 @@ public class ChangeLocation extends Activity {
             case R.id.contact_us:
                 MenuOptions m2 = new MenuOptions(getApplicationContext());
                 m2.contactUs();
+                return true;
+            case R.id.about_us:
+                MenuOptions m3 = new MenuOptions(getApplicationContext());
+                m3.aboutApp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

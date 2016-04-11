@@ -10,13 +10,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 /**
- * Created by sangeetha on 4/9/16.
+ * Created by sangeetha on 4/10/16.
  */
-public class ContactUs extends Activity {
+public class AboutApp extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contact_us);
+        setContentView(R.layout.about_app);
 
         ActionBar actionBar;
         actionBar = getActionBar();

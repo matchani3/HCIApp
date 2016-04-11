@@ -42,6 +42,7 @@ public class welcome extends Activity {
     ListView allOptionsList;
 
     public static String TERM_TO_SEARCH = "";
+    public static String PASS = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,20 +121,15 @@ public class welcome extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                // ListView Clicked item index
-                int itemPosition= position;
-
                 // ListView Clicked item value
                 String itemName= (String) allOptionsList.getItemAtPosition(position);
-                itemName = itemName.replaceAll(" ", "_").toLowerCase();
-                Log.d("Type is ", itemName);
 
 //                Starting new intent
                 Intent in = new Intent(getApplicationContext(),
                         DisplayAllResults.class);
 
                 // Sending term to search for to DisplayAllResult activity
-                in.putExtra(TERM_TO_SEARCH, itemName);
+                in.putExtra(PASS, itemName);
                 startActivity(in);
 
 
@@ -164,6 +160,10 @@ public class welcome extends Activity {
             case R.id.contact_us:
                 MenuOptions m2 = new MenuOptions(getApplicationContext());
                 m2.contactUs();
+                return true;
+            case R.id.about_us:
+                MenuOptions m3 = new MenuOptions(getApplicationContext());
+                m3.aboutApp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

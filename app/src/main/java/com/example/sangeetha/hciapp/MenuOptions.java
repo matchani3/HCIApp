@@ -36,5 +36,12 @@ public class MenuOptions{
         in3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         c.startActivity(in3);
     }
+    public void aboutApp(){
+        Intent in3 = new Intent(c,
+                AboutApp.class);
+        in3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        c.startActivity(in3);
+    }
+
 
 }
